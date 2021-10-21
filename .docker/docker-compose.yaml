@@ -1,0 +1,57 @@
+version: "3.7"
+services:
+  wordpress:
+    build: server
+    environment:
+      - WORDPRESS_DB_HOST=db
+      - WORDPRESS_DB_USER=wordpress
+      - WORDPRESS_DB_PASSWORD=wordpress
+      - WORDPRESS_DB_NAME=wordpress
+      - WORDPRESS_DEBUG=1
+      - VIRTUAL_HOST=localhost
+      - VIRTUAL_PROTO=http
+      - VIRTUAL_PORT=80
+    depends_on:
+      - db
+    volumes:
+      - ./src:/var/www/html
+    expose:
+      - "80"
+    networks:
+      main:
+  php-cli:
+    build: cli
+    depends_on:
+      - wordpress
+      - db
+    networks:
+      main:
+  db:
+    image: mysql:5.7
+    environment:
+      - MYSQL_DATABASE=wordpress
+      - MYSQL_USER=wordpress
+      - MYSQL_PASSWORD=wordpress
+      - MYSQL_ROOT_PASSWORD=changeme
+    ports:
+      - "3306:3306"
+    networks:
+      main:
+  proxy:
+    image: jwilder/nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./certs:/etc/nginx/certs
+    depends_on:
+      - wordpress
+      - db
+    networks:
+      main:
+networks:
+  main:
+volumes:
+  db:
+  wordpress:
