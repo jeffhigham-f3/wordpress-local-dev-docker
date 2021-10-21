@@ -1,6 +1,6 @@
 # wordpress-local-dev-docker
 
-Everyting you need for local wordpress development setup using [Docker "Dev Environments Preview"] (https://docs.docker.com/desktop/dev-environments/).
+Everything you need for local wordpress development setup using [Docker "Dev Environments Preview"] (https://docs.docker.com/desktop/dev-environments/).
 
 ## Images
 - [wordpress:latest](https://hub.docker.com/_/wordpress/)
